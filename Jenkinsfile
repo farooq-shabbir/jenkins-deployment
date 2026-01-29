@@ -1,6 +1,7 @@
 pipeline {
     agent {
-        node {
+        docker {
+            image 'node:18-alpine'
             label 'docker-agent-node'
         }
     }
