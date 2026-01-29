@@ -6,22 +6,26 @@ pipeline {
     stages {
         stage('Install Dependencies') {
             steps {
-                bat 'npm install'
+                echo 'Installing Dependencies'
+                sh 'npm install'
             }
         }
         stage('Build') {
             steps {
-                bat 'npm run build'
+                echo 'Building...'
+                sh 'npm run build'
             }
         }
         stage('Test') {
             steps {
-                bat 'npm test -- --watchAll=false'
+                echo 'Testing...'
+                sh 'npm test -- --watchAll=false'
             }
         }
         stage('Deploy') {
             steps {
-                bat 'npm run preview'
+                echo 'Deploying...'
+                sh 'npm run preview'
             }
         }
     }
