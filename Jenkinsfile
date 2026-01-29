@@ -140,10 +140,11 @@
 
 pipeline {
     agent {
-        docker {
-            image 'node-docker-cli:20-alpine'
-            args '-v /var/run/docker.sock:/var/run/docker.sock'
-        }
+        // docker {
+        //     image 'node-docker-cli:20-alpine'
+        //     args '-v /var/run/docker.sock:/var/run/docker.sock'
+        // }
+        label 'docker-agent-node'
     }
 
     triggers {
@@ -154,6 +155,7 @@ pipeline {
         APP_NAME = "jenkins-deployment"
         IMAGE_TAG = "jenkins-deployment:latest"
         DEPLOY_PORT = "3000"
+        DOCKER_HOST = "tcp://docker-socat:2375"
     }
 
     stages {
