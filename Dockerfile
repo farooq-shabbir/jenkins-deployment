@@ -1,10 +1,8 @@
-FROM node:18-alpine
+FROM jenkins/inbound-agent:alpine
 
-# Install Java (required for Jenkins agent)
-RUN apk add --no-cache openjdk11-jre-headless openssh-client git curl
+USER root
 
-# Create Jenkins working directory
-RUN mkdir -p /home/jenkins && chmod 777 /home/jenkins
+# Install Node.js
+RUN apk add --no-cache nodejs npm
 
-# Set working directory
-WORKDIR /home/jenkins
+USER jenkins
