@@ -60,7 +60,7 @@ pipeline {
     agent {
         docker {
             image 'node:18-alpine'
-            label 'docker-agent-node'
+            // label 'docker-agent-node'
             args '-v /var/run/docker.sock:/var/run/docker.sock' // allows building/running Docker inside pipeline
         }
     }
