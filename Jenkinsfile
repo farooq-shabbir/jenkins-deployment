@@ -60,17 +60,16 @@ pipeline {
     agent {
         docker {
             image 'node:18-alpine'
-            // label 'docker-agent-node'
-            args '-v /var/run/docker.sock:/var/run/docker.sock' // allows building/running Docker inside pipeline
+            args '-v /var/run/docker.sock:/var/run/docker.sock'
         }
     }
 
     triggers {
-        githubPush() // triggers on GitHub push
+        githubPush()
     }
 
     environment {
-        APP_NAME = "jenkins-deployment" // matches your package.json
+        APP_NAME = "jenkins-deployment"
         IMAGE_TAG = "jenkins-deployment:latest"
         DEPLOY_PORT = "3000"
     }
@@ -79,10 +78,7 @@ pipeline {
         stage('Install Dependencies') {
             steps {
                 echo 'Installing Dependencies...'
-                // Cache node_modules to speed up builds
-                cache(path: 'node_modules', key: "npm-${GIT_COMMIT}", restoreKeys: ['npm-']) {
-                    sh 'npm install'
-                }
+                sh 'npm install'
             }
         }
 
@@ -100,6 +96,13 @@ pipeline {
             }
         }
 
+        stage('Setup Docker CLI') {
+            steps {
+                echo 'Installing Docker CLI inside agent container...'
+                sh 'apk add --no-cache docker-cli'
+            }
+        }
+
         stage('Build Docker Image') {
             steps {
                 echo 'Building Docker image...'
@@ -113,7 +116,6 @@ pipeline {
         stage('Deploy') {
             steps {
                 echo 'Deploying container...'
-                // Stop existing container if running
                 sh """
                     docker stop ${APP_NAME} || true
                     docker rm ${APP_NAME} || true
@@ -133,3 +135,4 @@ pipeline {
         }
     }
 }
+
